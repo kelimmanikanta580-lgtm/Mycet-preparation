@@ -5,7 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyCet Preparation - Ace Your Exams</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="website icon" type="png" href="screenshot(2).png">
+    
+    <!-- 🔥 ADD THIS LINE 1: FIREBASE CDN LINKS -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -503,24 +508,14 @@
                 <h3 id="material-title">POLYCET Study Materials</h3>
                 <div class="material-grid">
                     <div class="material-card">
-                        <h3>Mathematics</h3>
-                        <p>Complete math syllabus with solved examples and practice problems</p>
-                        <a href="#" class="btn">Download</a>
-                    </div>
-                    <div class="material-card">
-                        <h3>Physics</h3>
-                        <p>Physics concepts, formulas, and numerical problems</p>
-                        <a href="#" class="btn">Download</a>
-                    </div>
-                    <div class="material-card">
-                        <h3>Chemistry</h3>
-                        <p>Chemical reactions, equations, and important concepts</p>
-                        <a href="#" class="btn">Download</a>
+                        <h3>Combined Study Material</h3>
+                        <p>Complete syllabus with Mathematics, Physics, and Chemistry combined</p>
+                        <a href="https://drive.google.com/file/d/1zEB__Rj6-869U2dqgRkbnbKqisyhjlyw/view?usp=drivesdk" class="btn" target="_blank">Download</a>
                     </div>
                     <div class="material-card">
                         <h3>Previous Year Papers</h3>
                         <p>Last 5 years question papers with solutions</p>
-                        <a href="#" class="btn">Download</a>
+                        <a href="https://drive.google.com/file/d/1zEB__Rj6-869U2dqgRkbnbKqisyhjlyw/view?usp=drivesdk" class="btn" target="_blank">Download</a>
                     </div>
                 </div>
             </div>
@@ -637,6 +632,25 @@
         <li></li>
     </ul>
 
+    <!-- 🔥 ADD THIS LINE 2: FIREBASE CONFIGURATION -->
+    <script>
+        // 🔥 REPLACE THIS WITH YOUR ACTUAL FIREBASE CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyCtIFWpEU4vFc6Q8urTeM93QiksooNzk14",
+            authDomain: "mycet-preparation.firebaseapp.com",
+            projectId: "mycet-preparation",
+            storageBucket: "mycet-preparation.firebasestorage.app",
+            messagingSenderId: "412386919151",
+            appId: "1:412386919151:web:c72942ab692d983030911a"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+    </script>
+
+    <!-- 🔥 YOUR MAIN JAVASCRIPT CODE (MODIFIED) -->
     <script>
         // Page Navigation
         document.querySelectorAll('.nav-link').forEach(link => {
@@ -699,44 +713,127 @@
 
         // Function to update download links based on exam type
         function updateDownloadLinks(examType) {
-            const downloadLinks = document.querySelectorAll('#material-content .btn');
-            const polycetLink = 'https://drive.google.com/file/d/1zEB__Rj6-869U2dqgRkbnbKqisyhjlyw/view?usp=drivesdk';
+            const materialGrid = document.querySelector('#material-content .material-grid');
             
             if (examType === 'polycet') {
-                // Set all download links to the POLYCET Google Drive link
-                downloadLinks.forEach(link => {
-                    link.href = polycetLink;
-                    link.target = '_blank';
-                    link.textContent = 'Download';
-                });
+                materialGrid.innerHTML = `
+                    <div class="material-card">
+                        <h3>Combined Study Material</h3>
+                        <p>Complete syllabus with Mathematics, Physics, and Chemistry combined</p>
+                        <a href="https://drive.google.com/file/d/1zEB__Rj6-869U2dqgRkbnbKqisyhjlyw/view?usp=drivesdk" class="btn" target="_blank">Download</a>
+                    </div>
+                    <div class="material-card">
+                        <h3>Previous Year Papers</h3>
+                        <p>Last 5 years question papers with solutions</p>
+                        <a href="https://drive.google.com/file/d/1zEB__Rj6-869U2dqgRkbnbKqisyhjlyw/view?usp=drivesdk" class="btn" target="_blank">Download</a>
+                    </div>
+                `;
             } else if (examType === 'ecet') {
-                // For ECET, you can set different links here
-                downloadLinks.forEach(link => {
-                    link.href = '#';
-                    link.textContent = 'Coming Soon';
-                    link.removeAttribute('target');
-                });
+                materialGrid.innerHTML = `
+                    <div class="material-card">
+                        <h3>Computer Engineering</h3>
+                        <p>Complete computer engineering syllabus with solved examples</p>
+                        <a href="https://drive.google.com/file/d/1ALx3NMXNfim4DZtSLj7Yp_Dr-X3uUatM/view?usp=drivesdk" class="btn" target="_blank">Download</a>
+                    </div>
+                    <div class="material-card">
+                        <h3>Civil Engineering</h3>
+                        <p>Civil engineering concepts, formulas, and numerical problems</p>
+                        <a href="#" class="btn">Coming Soon</a>
+                    </div>
+                    <div class="material-card">
+                        <h3>Mechanical Engineering</h3>
+                        <p>Mechanical engineering principles and important concepts</p>
+                        <a href="#" class="btn">Coming Soon</a>
+                    </div>
+                    <div class="material-card">
+                        <h3>Previous Year Papers</h3>
+                        <p>Last 5 years question papers with solutions</p>
+                        <a href="#" class="btn">Coming Soon</a>
+                    </div>
+                `;
             } else if (examType === 'eapcet') {
-                // For EAPCET, you can set different links here
-                downloadLinks.forEach(link => {
-                    link.href = '#';
-                    link.textContent = 'Coming Soon';
-                    link.removeAttribute('target');
-                });
+                materialGrid.innerHTML = `
+                    <div class="material-card">
+                        <h3>Engineering Stream</h3>
+                        <p>Complete engineering stream syllabus with solved examples</p>
+                        <a href="#" class="btn">Coming Soon</a>
+                    </div>
+                    <div class="material-card">
+                        <h3>Agriculture Stream</h3>
+                        <p>Agriculture concepts, formulas, and important topics</p>
+                        <a href="#" class="btn">Coming Soon</a>
+                    </div>
+                    <div class="material-card">
+                        <h3>Pharmacy Stream</h3>
+                        <p>Pharmacy principles and important concepts</p>
+                        <a href="#" class="btn">Coming Soon</a>
+                    </div>
+                    <div class="material-card">
+                        <h3>Previous Year Papers</h3>
+                        <p>Last 5 years question papers with solutions</p>
+                        <a href="#" class="btn">Coming Soon</a>
+                    </div>
+                `;
             }
         }
 
-        // Form submissions
+        // 🔥 REPLACED: Firebase Login Form (REAL AUTHENTICATION)
         document.getElementById('login-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            alert('Login functionality would be implemented with backend');
-            // Here you would typically send the data to your Python backend
+            const email = this.querySelector('input[type="email"]').value;
+            const password = this.querySelector('input[type="password"]').value;
+            
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    alert('Login successful! Welcome ' + userCredential.user.email);
+                    showPage('home');
+                    this.reset();
+                })
+                .catch((error) => {
+                    alert('Login failed: ' + error.message);
+                });
         });
 
+        // 🔥 REPLACED: Firebase Register Form (REAL AUTHENTICATION)
         document.getElementById('register-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            alert('Registration functionality would be implemented with backend');
-            // Here you would typically send the data to your Python backend
+            const name = this.querySelector('input[type="text"]').value;
+            const email = this.querySelector('input[type="email"]').value;
+            const password = this.querySelector('input[type="password"]').value;
+            const confirmPassword = this.querySelectorAll('input[type="password"]')[1].value;
+            
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+            
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Save user data to Firestore
+                    return db.collection("users").doc(userCredential.user.uid).set({
+                        name: name,
+                        email: email,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        examPreference: ""
+                    });
+                })
+                .then(() => {
+                    alert('Registration successful!');
+                    showPage('home');
+                    this.reset();
+                })
+                .catch((error) => {
+                    alert('Registration failed: ' + error.message);
+                });
+        });
+
+        // Check if user is already logged in
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                console.log('User is logged in:', user.email);
+            } else {
+                console.log('User is logged out');
+            }
         });
     </script>
 </body>
